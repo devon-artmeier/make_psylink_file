@@ -88,8 +88,12 @@ int main(int argc, char* argv[])
 		output << "\tinclude\t\"" << object_file << "\"\n";
 	}
 
-	std::ifstream instructions(instructions_file, std::ios::in);
-	if (instructions.is_open()) {
+	if (!instructions_file.empty()) {
+		std::ifstream instructions(instructions_file, std::ios::in);
+		if (!instructions.is_open()) {
+			std::cout << "Error: Cannot open \"" << instructions_file << "\" for reading.\n";
+			return -1;
+		}
 		output << "\n" << instructions.rdbuf();
 	}
 }
