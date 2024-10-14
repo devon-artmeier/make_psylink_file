@@ -14,12 +14,13 @@
 	PERFORMANCE OF THIS SOFTWARE.
 */
 
+#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
 
-static int check_argument(const int argc, char* argv[], int& index, const std::string& option)
+static int CheckArgument(const int argc, char* argv[], int& index, const std::string& option)
 {
 	if (strcmp(argv[index], ("-" + option).c_str()) == 0) {
 		if (++index >= argc) {
@@ -47,7 +48,7 @@ int main(int argc, char* argv[])
 
 	for (int i = 1; i < argc; i++) {
 		int success;
-		if ((success = check_argument(argc, argv, i, "c")) < 0) {
+		if ((success = CheckArgument(argc, argv, i, "c")) < 0) {
 			return -1;
 		} else if (success > 0) {
 			if (!instructions_file.empty()) {
@@ -58,7 +59,7 @@ int main(int argc, char* argv[])
 			continue;
 		}
 
-		if ((success = check_argument(argc, argv, i, "o")) < 0) {
+		if ((success = CheckArgument(argc, argv, i, "o")) < 0) {
 			return -1;
 		} else if (success > 0) {
 			if (!output_file.empty()) {
