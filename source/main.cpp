@@ -14,87 +14,97 @@
 	PERFORMANCE OF THIS SOFTWARE.
 */
 
+#include <algorithm>
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
-static int CheckArgument(const int argc, char* argv[], int& index, const std::string& option)
+static std::string StringToLower(const std::string& str)
 {
-	if (strcmp(argv[index], ("-" + option).c_str()) == 0) {
-		if (++index >= argc) {
-			std::cout << "Error: Missing parameter for \"-" << option << "\"\n";
-			return -1;
-		}
-		return 1;
+	std::string lower_str = str;
+	std::transform(lower_str.begin(), lower_str.end(), lower_str.begin(), [](unsigned char c) { return std::tolower(c); });
+	return lower_str;
+}
+
+static bool CheckArgument(const int argc, char* argv[], int& index, const std::string& option, bool ignore_case = false)
+{
+	std::string option_copy = option;
+	if (ignore_case) {
+		option_copy = StringToLower(option);
 	}
-	return 0;
+
+	if (strcmp(argv[index], ("-" + option_copy).c_str()) == 0) {
+		if (++index >= argc) {
+			throw std::runtime_error(("Missing parameter for \"-" + option + "\"").c_str());
+		}
+		return true;
+	}
+	return false;
 }
 
 int main(int argc, char* argv[])
 {
 	std::vector<std::string> object_files;
 	std::string              instructions_file = "";
-	std::string              output_file = "";
+	std::string              output_file       = "";
 
 	if (argc < 2) {
-		std::cout << "Usage: make-psylink-file [object files] -c [instructions] -o [output]\n\n"
-			"[object files]     - List of object files to link\n"
-			" -c [instructions] - Linker instructions file\n"
-			" -o [output]       - Output file\n";
+		std::cout << "Usage: make-psylink-file [object files] -c [instructions] -o [output]" << std::endl << std::endl <<
+		             "    [object files]    - List of object files to link" << std::endl <<
+		             "    -c [instructions] - Linker instructions file" << std::endl <<
+		             "    -o [output]       - Output file" << std::endl;
 		return -1;
 	}
 
-	for (int i = 1; i < argc; i++) {
-		int success;
-		if ((success = CheckArgument(argc, argv, i, "c")) < 0) {
-			return -1;
-		} else if (success > 0) {
-			if (!instructions_file.empty()) {
-				std::cout << "Error: Instructions file already defined.\n";
-				return -1;
+	try {
+		for (int i = 1; i < argc; i++) {
+			if (CheckArgument(argc, argv, i, "c")) {
+				if (!instructions_file.empty()) {
+					throw std::runtime_error("Instructions file already defined.");
+				}
+				instructions_file = argv[i];
+				continue;
 			}
-			instructions_file = argv[i];
-			continue;
-		}
 
-		if ((success = CheckArgument(argc, argv, i, "o")) < 0) {
-			return -1;
-		} else if (success > 0) {
-			if (!output_file.empty()) {
-				std::cout << "Error: Output file already defined.\n";
-				return -1;
+			if (CheckArgument(argc, argv, i, "o")) {
+				if (!output_file.empty()) {
+					throw std::runtime_error("Output file already defined.");
+				}
+				output_file = argv[i];
+				continue;
 			}
-			output_file = argv[i];
-			continue;
+
+			object_files.push_back(argv[i]);
 		}
 
-		object_files.push_back(argv[i]);
-	}
-
-	if (output_file.empty()) {
-		std::cout << "Error: Output symbol file not defined.\n";
-		return -1;
-	}
-
-	std::ofstream output(output_file, std::ios::out);
-	if (!output.is_open()) {
-		std::cout << "Error: Cannot open \"" << output_file << "\" for writing.\n";
-		return -1;
-	}
-
-	output << "\n";
-	for (auto& object_file : object_files) {
-		output << "\tinclude\t\"" << object_file << "\"\n";
-	}
-
-	if (!instructions_file.empty()) {
-		std::ifstream instructions(instructions_file, std::ios::in);
-		if (!instructions.is_open()) {
-			std::cout << "Error: Cannot open \"" << instructions_file << "\" for reading.\n";
-			return -1;
+		if (output_file.empty()) {
+			throw std::runtime_error("Output symbol file not defined.");
 		}
-		output << "\n" << instructions.rdbuf();
+
+		std::ofstream output(output_file, std::ios::out);
+		if (!output.is_open()) {
+			throw std::runtime_error(("Cannot open \"" + output_file + "\" for reading.").c_str());
+		}
+
+		output << std::endl;
+		for (auto& object_file : object_files) {
+			output << "\tinclude\t\"" << object_file << "\"" << std::endl;
+		}
+
+		if (!instructions_file.empty()) {
+			std::ifstream instructions(instructions_file, std::ios::in);
+			if (!instructions.is_open()) {
+				throw std::runtime_error(("Cannot open \"" + instructions_file + "\" for reading.").c_str());
+			}
+			output << std::endl << instructions.rdbuf();
+		}
+	} catch (std::exception& e) {
+		std::cout << "Error: " << e.what() << std::endl;
+		return -1;
 	}
+	
+	return 0;
 }
