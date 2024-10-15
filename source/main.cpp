@@ -52,10 +52,10 @@ int main(int argc, char* argv[])
 	std::string              output_file       = "";
 
 	if (argc < 2) {
-		std::cout << "Usage: make-psylink-file [object files] -c [instructions] -o [output]" << std::endl << std::endl <<
-		             "    [object files]    - List of object files to link" << std::endl <<
+		std::cout << "Usage: make-psylink-file -c [instructions] -o [output] [object files]" << std::endl << std::endl <<
 		             "    -c [instructions] - Linker instructions file" << std::endl <<
-		             "    -o [output]       - Output file" << std::endl;
+		             "    -o [output]       - Output file" << std::endl <<
+		             "    [object files]    - List of object files to link" << std::endl << std::endl;
 		return -1;
 	}
 
