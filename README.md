@@ -6,7 +6,7 @@ Tool to create a Psy-Q PSYLINK command file from a list of object files and inst
 
 ## Usage
 
-    make-psylink-file -c [instructions] -o [output]  [object files]
+    make_psylink_file -c [instructions] -o [output]  [object files]
     
         -c [instructions] - Linker instructions file
         -o [output]       - Output file
