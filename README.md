@@ -2,7 +2,7 @@
 
 [![Build Status](https://github.com/devon-artmeier/make_psylink_file/actions/workflows/cmake-multi-platform.yml/badge.svg)](https://github.com/devon-artmeier/make_psylink_file/actions/workflows/cmake-multi-platform.yml)
 
-Tool to create a Psy-Q PSYLINK command file from a list of object files and instructions file.
+This is a tool to create a Psy-Q PSYLINK command file from a list of object files and instructions file.
 
 ## Usage
 
