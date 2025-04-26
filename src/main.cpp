@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
 	std::string              output_file       = "";
 
 	if (argc < 2) {
-		std::cout << "Usage: mkpsylink -c [instructions] -o [output] [object files]" << std::endl << std::endl <<
+		std::cout << "Usage: makepsylink -c [instructions] -o [output] [object files]" << std::endl << std::endl <<
 		             "    -c [instructions] - Linker instructions file" << std::endl <<
 		             "    -o [output]       - Output file" << std::endl <<
 		             "    [object files]    - List of object files to link" << std::endl << std::endl;
