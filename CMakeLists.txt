@@ -1,4 +1,4 @@
 cmake_minimum_required(VERSION 3.16)
-project(makepsylink LANGUAGES CXX)
+project(mkpsylink LANGUAGES CXX)
 
-add_executable(makepsylink "src/main.cpp")
+add_executable(mkpsylink "src/main.cpp")
