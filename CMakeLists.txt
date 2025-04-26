@@ -1,4 +1,4 @@
 cmake_minimum_required(VERSION 3.16)
-project(make_psylink_file LANGUAGES CXX)
+project(makepsylink LANGUAGES CXX)
 
-add_executable(make_psylink_file "src/main.cpp")
+add_executable(makepsylink "src/main.cpp")
