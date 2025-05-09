@@ -11,3 +11,10 @@ This is a tool to create a Psy-Q PSYLINK command file from a list of object file
         -c [instructions] - Linker instructions file
         -o [output]       - Output file
         [object files]    - List of object files to link
+
+## Build Instructions
+
+CMake is required to build this.
+
+* On Windows, you can run "make.bat" and the built executable will be put in the "out/bin" folder.
+* On other systems, you can call "make" and then "make install".
