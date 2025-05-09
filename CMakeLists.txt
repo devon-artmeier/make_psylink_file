@@ -3,3 +3,5 @@ project(mkpsylink LANGUAGES CXX)
 
 add_executable(mkpsylink
 	"src/main.cpp")
+
+install(TARGETS mkpsylink)
